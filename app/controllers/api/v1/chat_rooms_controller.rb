@@ -8,7 +8,7 @@ class Api::V1::ChatRoomsController < Api::V1::ApiController
   end
 
   def create
-    title = JSON.parse(params["chat_room"])
+    title = JSON.parse(params["title"])
     chat_room = ChatRoom.create(title: title)
     if chat_room.save
       render json: true, status: 201
