@@ -1,0 +1,14 @@
+<%= @chat_room.title %>
+
+<ul id="messages">
+  <% @chat_room.messages.each do |msg| %>
+    <li> <%= msg.content %> --- <%= msg.created_at.strftime("at %I:%M%p") %> </li>
+  <% end %>
+</ul>
+
+<%= form_for @chat_room.messages.new, :remote => true do |f| %>
+  <p> <%= f.label :new_message %> </p>
+  <p> <%= f.text_field :content %> </p>
+  <%= f.hidden_field :chat_room_id %>
+  <%= f.submit "Post" %>
+<% end %>

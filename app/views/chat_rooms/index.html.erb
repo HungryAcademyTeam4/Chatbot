@@ -1,0 +1,9 @@
+<h1> Lobby </h1>
+
+<ul>
+  <% @chat_rooms.each do |room| %>
+  <li> <%= link_to room.title, chat_room_path(room) %> </li>
+  <% end %>
+</ul>
+
+<p> <%= link_to "Create New Room", new_chat_room_path %> </p>

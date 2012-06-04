@@ -1,0 +1,6 @@
+<h3>Create New Chat Room </h3>
+<%= form_for @chat_room do |f| %>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+  <%= f.submit "Post" %>
+<% end %>
