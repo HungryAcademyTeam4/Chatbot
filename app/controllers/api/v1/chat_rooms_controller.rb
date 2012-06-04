@@ -8,11 +8,12 @@ class Api::V1::ChatRoomsController < Api::V1::ApiController
   end
 
   def create
-    chat_room = ChatRoom.new(params[:chat_room])
+    title = JSON.parse(params["chat_room"])
+    chat_room = ChatRoom.create(title: title)
     if chat_room.save
-      redirect_to root_url, notice: "Successfully created #{chat_room.title} room "
+      render json: true, status: 201
     else
-      render :new
+      render json: true, status: 406
     end
   end
 
