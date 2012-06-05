@@ -7,6 +7,7 @@ gem 'rails', '3.2.5'
 
 gem 'sqlite3'
 gem 'rabl'
+gem 'chatbot_api', "1.0", git: "git://github.com/HungryAcademyTeam4/chatbot_api.git"
 
 
 # Gems used only for assets and not required

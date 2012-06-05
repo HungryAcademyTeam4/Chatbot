@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/HungryAcademyTeam4/chatbot_api.git
+  revision: d0091231779096cba46e41664719d378e5203ca1
+  specs:
+    chatbot_api (1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -106,6 +112,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  chatbot_api (= 1.0)!
   coffee-rails (~> 3.2.1)
   jquery-rails
   rabl
