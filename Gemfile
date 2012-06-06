@@ -8,6 +8,7 @@ gem 'rails', '3.2.5'
 gem 'sqlite3'
 gem 'rabl'
 gem 'chatbot_api', git: "git://github.com/HungryAcademyTeam4/chatbot_api.git"
+gem 'faraday'
 
 
 # Gems used only for assets and not required
