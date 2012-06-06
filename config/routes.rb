@@ -4,4 +4,11 @@ Chatbot::Application.routes.draw do
   resources :chat_rooms
   resources :messages
 
+  namespace :api do
+    namespace :v1 do
+      resources :chat_rooms
+      resources :messages
+    end
+  end
+
 end
