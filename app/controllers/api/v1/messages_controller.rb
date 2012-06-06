@@ -1,4 +1,8 @@
 class Api::V1::MessagesController < Api::V1::ApiController
+  def index
+    @messages = Message.all
+  end
+
   def create
     message = Message.create(params["message"])
     if message.save
