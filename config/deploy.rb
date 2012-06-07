@@ -1,7 +1,12 @@
 MODE = "staging"
 PRODUCTION_SERVER = "fallingfoundry.com"
-STAGING_SERVER = "2.2.2.2:3000"
+STAGING_SERVER = "2.2.2.2"
 SERVER = MODE == "production" ? PRODUCTION_SERVER : STAGING_SERVER
+
+
+PRODUCTION_PORT = ":80"
+STAGING_PORT = ":3000"
+PORT = MODE == "production" ? PRODUCTION_PORT : STAGING_PORT
 
 
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
@@ -38,7 +43,7 @@ namespace :deploy do
   end
   task :start do
     run "cd /home/#{user}/apps/#{application}/current && RAILS_ENV=production bundle exec rake db:create && bundle exec rake db:migrate"
-    run "cd /home/#{user}/apps/#{application}/current && RAILS_ENV=production bundle exec puma -p 4568"
+    run "cd /home/#{user}/apps/#{application}/current && RAILS_ENV=production bundle exec unicorn -p 3000"
   end
   after "deploy", "deploy:create_release_log"
   after "deploy", "deploy:start"
