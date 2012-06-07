@@ -9,6 +9,8 @@ gem 'sqlite3'
 gem 'rabl'
 gem 'chatbot_api', git: "git://github.com/HungryAcademyTeam4/chatbot_api.git"
 gem 'faraday'
+gem 'faye'
+gem 'thin'
 
 
 # Gems used only for assets and not required

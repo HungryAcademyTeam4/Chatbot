@@ -6,6 +6,7 @@ class Api::V1::MessagesController < Api::V1::ApiController
   def create
     message = Message.create(params["message"])
     if message.save
+      message.broadcast
       render json: true, status: 201
     else
       render json: true, status: 406
