@@ -12,5 +12,9 @@ class Api::V1::MessagesController < Api::V1::ApiController
       render json: true, status: 406
     end
   end
+
+  def show
+    @message = Message.find(params[:id])
+  end
 end
 
