@@ -6,7 +6,7 @@ class Message < ActiveRecord::Base
 
   def broadcast
     url = "http://fallinggarden.com:9000/faye"
-    message = { channel: "/#{self.chat_room_id}", data: { 'text' => self.content } }
+    message = { channel: "/#{self.chat_room_id}", data: { 'content' => self.content, 'user_id' => self.user_id, 'created_at' => self.created_at } }
     Net::HTTP.post_form(URI.parse(url), message: message.to_json)
   end
 end
