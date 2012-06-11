@@ -75,6 +75,9 @@ GEM
       yajl-ruby (>= 1.0.0)
     faye-websocket (0.4.5)
       eventmachine (>= 0.12.0)
+    gon (3.0.4)
+      actionpack (>= 2.3.0)
+      json
     highline (1.6.12)
     hike (1.2.1)
     http_parser.rb (0.5.3)
@@ -170,6 +173,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   faraday
   faye
+  gon
   jquery-rails
   rabl
   rails (= 3.2.5)

@@ -14,9 +14,19 @@
 //= require jquery_ujs
 //= require_tree .
 
-// $(function() {
-//   var faye = new Faye.Client('http://localhost:9292/faye');
-//   faye.subscribe('/messages/new', function (data) {
-//     alert(data);
-//   });
-// });
+
+
+$(function() {
+    var faye = new Faye.Client('http://fallinggarden.com:9000/faye');
+    faye.subscribe("/" + gon.chat_room.id, function (data) {
+      console.log(data);
+      $("#messages").append('<li>' + data.text + '</li>')
+    });
+
+  $(".new_message").live("ajax:complete", function(event,xhr,status){
+    $('.new_message')[0].reset();
+  });
+});
+
+
+

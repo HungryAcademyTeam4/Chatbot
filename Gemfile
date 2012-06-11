@@ -13,6 +13,7 @@ gem 'faye'
 gem 'thin'
 gem 'capistrano'
 gem 'unicorn'
+gem 'gon'
 
 
 # Gems used only for assets and not required

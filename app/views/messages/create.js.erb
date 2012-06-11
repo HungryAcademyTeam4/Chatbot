@@ -1,4 +1,2 @@
-<% broadcast "/message/new" do %>
-  $("#messages").append("<li><%= escape_javascript(@message.content) %></li>");
-<% end %>
+$("#messages").append("<li><%= escape_javascript(@message.content) %></li>");
 $(".new_message")[0].reset();

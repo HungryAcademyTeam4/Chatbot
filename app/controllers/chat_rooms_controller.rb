@@ -18,5 +18,6 @@ class ChatRoomsController < ApplicationController
 
   def show
     @chat_room = ChatRoom.find(params[:id])
+    gon.chat_room = @chat_room
   end
 end
