@@ -17,7 +17,7 @@
 
 
 $(function() {
-    var faye = new Faye.Client('http://fallinggarden.com:9000/faye');
+    var faye = new Faye.Client('http://localhost:9000/faye');
     faye.subscribe("/" + gon.chat_room.id, function (data) {
       console.log(data);
       $("#messages").append('<li>' + data.content + "----" + data.created_at + '</li>')
