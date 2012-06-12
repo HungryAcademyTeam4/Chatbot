@@ -8,7 +8,8 @@ class Message < ActiveRecord::Base
     { 'content'    => self.content,
       'user_id'    => self.user_id,
       'created_at' => self.created_at,
-      'id'         => self.id }
+      'id'         => self.id,
+      'user_name'  => self.user_name }
   end
 
   def broadcast_to_specific_channel
