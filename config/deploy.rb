@@ -1,50 +1,89 @@
-MODE = "staging"
+# Configure these lines for your app prior to launch.
+# Application Name is the folder it will deploy to.
+# Script Name is the name of the logfile and the god script.
+# Start Command is the command god will issue to start the process.
+
+APPLICATION_NAME = "Chatbot"
+SCRIPT_NAME = "chatbot"
+REPOSITORY = "git://github.com/HungryAcademyTeam4/Chatbot.git"
+START_COMMAND = "unicorn /apps/#{APPLICATION_NAME}/current/config.ru -p 3000"
+
+# Rainbows start example
+# START_COMMAND = "rainbows /apps/#{APPLICATION_NAME}/current/faye.ru -c /apps/#{APPLICATION_NAME}/current/rainbows.conf -E production -p 9000"
+
+# This assumes you want to launch to Falling Foundry.
+# If you want to launch to Falling Garden, launch with
+# DEPLOY_MODE="staging" cap deploy
+
 PRODUCTION_SERVER = "fallingfoundry.com"
-STAGING_SERVER = "2.2.2.2"
-SERVER = MODE == "production" ? PRODUCTION_SERVER : STAGING_SERVER
-
-
-PRODUCTION_PORT = ":80"
-STAGING_PORT = ":3000"
-PORT = MODE == "production" ? PRODUCTION_PORT : STAGING_PORT
+STAGING_SERVER = "fallinggarden.com"
+MODE = ENV["DEPLOY_MODE"] || "production"
+SERVER = MODE == "staging" ? STAGING_SERVER : PRODUCTION_SERVER
 
 
 $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
- require 'bundler/capistrano'
- require 'rvm/capistrano'
+require 'rvm/capistrano'
 server SERVER, :web, :db, :app, primary: true
-set :user, "deployer"
-set :application, "Chatbot"
+set :user, "root"
+set :application, APPLICATION_NAME
 
-set :deploy_to, "/home/#{user}/apps/#{application}"
+set :deploy_to, "/apps/#{application}"
 set :deploy_via, :remote_cache
-set :use_sudo, true
 
 set :scm, "git"
-set :repository,  "git@github.com:HungryAcademyTeam4/Chatbot.git"
-set :branch, "faye"
+set :repository, REPOSITORY
+set :branch, "master"
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
 namespace :deploy do
-  task :bundle_install do
-    run "cd /home/#{user}/apps/#{application}/current && bundle install"
+  namespace :assets do
+    task :precompile do
+      logger.info "Skipping precompilation of assets"
+    end
   end
-  task :create_release_log do
-    run <<-CMD
-    rm -rf #{latest_release}/log #{latest_release}/public/system #{latest_release}/tmp/pids &&
-    mkdir -p #{latest_release}/public &&
-    mkdir -p #{latest_release}/tmp &&
-    ln -s #{shared_path}/log #{latest_release}/log &&
-    ln -s #{shared_path}/system #{latest_release}/public/system &&
-    ln -s #{shared_path}/pids #{latest_release}/tmp/pids
-    CMD
+end
+
+namespace :deploy do
+  task :mkdirs do
+    run "mkdir /apps/#{application}/releases/current -p"
+    run "mkdir /apps/god_scripts -p"
+  end
+  task :create_god_script do
+    run %^cd /apps/god_scripts && touch #{SCRIPT_NAME}.rb && rm #{SCRIPT_NAME}.rb && touch #{SCRIPT_NAME}.rb^
+    run %^echo God.watch do \\\|w\\\| >> /apps/god_scripts/#{SCRIPT_NAME}.rb^
+    run %^echo w.log = \\\"/#{SCRIPT_NAME}.log\\\" >> /apps/god_scripts/#{SCRIPT_NAME}.rb^
+    run %^echo w.name = \\\"#{SCRIPT_NAME}\\\" >> /apps/god_scripts/#{SCRIPT_NAME}.rb^
+    run %^echo w.start = \\\"#{START_COMMAND}\\\" >> /apps/god_scripts/#{SCRIPT_NAME}.rb^
+    run %^echo w.keepalive >> /apps/god_scripts/#{SCRIPT_NAME}.rb^
+    run %^echo end >> /apps/god_scripts/#{SCRIPT_NAME}.rb^
+  end
+  task :bundle do
+    run "cd /apps/#{application}/current && bundle install --system"
   end
   task :start do
-    run "cd /home/#{user}/apps/#{application}/current && RAILS_ENV=production bundle exec rake db:create && bundle exec rake db:migrate"
-    run "cd /home/#{user}/apps/#{application}/current && RAILS_ENV=production bundle exec unicorn -p 3000"
+    run "cd / && god load apps/god_scripts/#{SCRIPT_NAME}.rb"
+    run "cd / && god start #{SCRIPT_NAME}"
   end
-  after "deploy", "deploy:create_release_log"
+  task :stop do
+    run "cd / && god stop #{SCRIPT_NAME}"
+  end
+  task :restart do
+    stop
+    start
+  end
+  task :ensure_god_running do
+    run "cd / && god"
+  end
+  task :db_migrate do
+    run "cd /apps/#{application}/current && rake db:create && rake db:migrate"
+  end
+  before "deploy:start", "deploy:ensure_god_running"
+  before "deploy:stop", "deploy:ensure_god_running"
+  before "deploy", "deploy:mkdirs"
+  before "deploy", "deploy:create_god_script"
+  after "deploy", "deploy:bundle"
+  after "deploy", "deploy:db_migrate"
   after "deploy", "deploy:start"
 end
