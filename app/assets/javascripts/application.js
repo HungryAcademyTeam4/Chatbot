@@ -13,3 +13,20 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+
+
+
+$(function() {
+    var faye = new Faye.Client('http://localhost:9000/faye');
+    faye.subscribe("/" + gon.chat_room.id, function (data) {
+      console.log(data);
+      $("#messages").append('<li>' + data.content + "----" + data.created_at + '</li>')
+    });
+
+  $(".new_message").live("ajax:complete", function(event,xhr,status){
+    $('.new_message')[0].reset();
+  });
+});
+
+
+
