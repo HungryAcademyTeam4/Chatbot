@@ -20,6 +20,7 @@ test:
 
 production:
   adapter: mysql2
-  database: db/production.mysql2
-  pool: 5
-  timeout: 5000
+  database: chatbot_production
+  encoding: utf8
+  username: root
+  password: databucket2
