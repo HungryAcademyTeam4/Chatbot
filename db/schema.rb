@@ -11,14 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120614134037) do
+ActiveRecord::Schema.define(:version => 20120614193857) do
 
   create_table "chat_rooms", :force => true do |t|
     t.string   "title"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.string   "user_id"
     t.string   "user_name"
+    t.boolean  "locked",     :default => false
   end
 
   create_table "messages", :force => true do |t|
@@ -28,6 +29,13 @@ ActiveRecord::Schema.define(:version => 20120614134037) do
     t.integer  "chat_room_id"
     t.string   "user_id"
     t.string   "user_name"
+  end
+
+  create_table "permissions", :force => true do |t|
+    t.string   "user_id"
+    t.integer  "chat_room_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
 end
