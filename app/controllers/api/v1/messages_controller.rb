@@ -4,6 +4,7 @@ class Api::V1::MessagesController < Api::V1::ApiController
   end
 
   def create
+    params["message"]["user_id"] = params["user_id"]
     message = Message.create(params["message"])
     if message.save
       render json: true, status: 201
