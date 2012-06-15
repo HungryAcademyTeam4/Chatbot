@@ -10,8 +10,8 @@ class Api::V1::PermissionsController < Api::V1::ApiController
 
   def destroy
     chat_room = ChatRoom.find_by_id(params["permission"]["chat_room_id"])
-    permission = chat_room.permissions.find_by_user_name(params["permission"]["user_name"])
-    if permission.destroy
+    unless chat_room.nil? || chat_room.permissions.blank?
+      chat_room.uninvite(params["permission"]["user_id"])
       render json: true, status: 201
     end
   end
