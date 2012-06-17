@@ -1,5 +1,5 @@
 class Message < ActiveRecord::Base
-  attr_accessible :content, :chat_room_id, :user_name
+  attr_accessible :content, :chat_room_id, :user_name, :user_id
   belongs_to :chat_room
   after_create :broadcast_to_specific_channel
   validates_presence_of :content, :chat_room_id

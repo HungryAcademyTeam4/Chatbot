@@ -14,5 +14,10 @@ class Api::V1::ChatRoomsController < Api::V1::ApiController
 
   def show
     @chat_room = ChatRoom.find(params[:id])
+    unless @chat_room.unlocked || @chat_room.permits?(params["user_id"])
+      error = {error: "Do not have permission."}
+      render json: error, status: 403
+    end
   end
+
 end
