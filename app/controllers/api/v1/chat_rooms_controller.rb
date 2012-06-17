@@ -1,6 +1,6 @@
 class Api::V1::ChatRoomsController < Api::V1::ApiController
   def index
-    @chat_rooms = ChatRoom.all
+    @chat_rooms = ChatRoom.where(user_id: params[:user_id])
   end
 
   def create
