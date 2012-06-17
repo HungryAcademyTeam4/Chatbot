@@ -1,6 +1,9 @@
 class Api::V1::ChatRoomsController < Api::V1::ApiController
   def index
-    @chat_rooms = ChatRoom.where(user_id: params[:user_id])
+    unlocked_rooms = ChatRoom.where(locked: false)
+    locked_rooms = ChatRoom.all.select { |room| room.permissions.find_by_user_id(params["user_id"]) }
+    @chat_rooms = unlocked_rooms + locked_rooms
+    @chat_rooms.uniq
   end
 
   def create
