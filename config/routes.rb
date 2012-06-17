@@ -8,6 +8,7 @@ Chatbot::Application.routes.draw do
     namespace :v1 do
       resources :chat_rooms
       resources :messages
+      resources :permissions, only: [:create, :destroy, :show]
     end
   end
 
