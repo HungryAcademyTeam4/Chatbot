@@ -12,7 +12,7 @@ end
 gem 'mysql2'
 
 gem 'rabl'
-gem 'chatbot_api', git: "git://github.com/HungryAcademyTeam4/chatbot_api.git"
+# gem 'chatbot_api', "1.0", git: "git://github.com/HungryAcademyTeam4/chatbot_api.git"
 gem 'faraday'
 gem 'faye'
 gem 'thin'
